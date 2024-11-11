@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Mini App</title>
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"-->
+<!--          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+    <script src="jquery-3.7.1.min.js"></script>
+
+</head>
+<body>
+
+
+<h2>Hello world</h2>
+
+<div id="output">
+</div>
+
+<button id="info" type="button" onclick="loadDoc()">Click</button>
+
+
+<form action="" method="post" id="form">
+
+    {{ form.csrf_token() }}
+    {% if get_flashed_messages() %}
+    {% for message in get_flashed_messages() %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% for field in form if field.name != 'csrf_token' %}
+
+    <p>{{ field.label() }}</p>
+    <p>{{ field }}</p>
+    {% endfor %}
+
+
+</form>
+
+
+<script>
+    function loadDoc(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+    const myObj = JSON.parse(this.responseText);
+    let text = "<table border='1'><th>Id</th><th>Name</th><th>Message</th>"
+    for (let x in myObj){
+    text += "<tr><td>" +myObj[x].id + "</td>" + "<td>" + myObj[x].name +
+     "</td>" + "<td>" + myObj[x].message + "</td></tr>";
+    }
+    text += "</table>"
+    document.getElementById('output').innerHTML = text;
+    };
+    xhttp.open('GET', '/getdata', true);
+    xhttp.send();
+    }
+</script>
+
+
+</body>
+</html>
